@@ -45,7 +45,7 @@ class MariVsRussianClassifier:
         train_texts = vectorizer.fit_transform(train['text'])
         train_labels = train['labels']
 
-        classifier = LogisticRegression()
+        classifier = LogisticRegression(random_state=2525)
         classifier.fit(train_texts, train_labels)
 
         test_texts = vectorizer.transform(test['text'])
