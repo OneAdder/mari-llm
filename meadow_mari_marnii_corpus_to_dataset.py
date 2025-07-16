@@ -2,7 +2,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, NamedTuple
 
 from bs4 import BeautifulSoup
 from datasets import Dataset
@@ -13,21 +13,54 @@ def _remove_tags(xml: str) -> str:
     return parser.get_text()
 
 
-def _split(text: str) -> list[str]:
-    split = re.split(r'\{.*?@.*?@.*?@.*?@.*?\}', text, flags=re.DOTALL)
-    return split[1:]
+_META = re.compile(r'\{.*?@.*?@.*?@.*?@.*?\}\n')
+_PAD_META = '...'
 
 
-def parse_corpus(root_path: Path) -> Iterable[str]:
+class CorpusEntry(NamedTuple):
+    text: str
+    author: str = _PAD_META
+    title: str = _PAD_META
+    genre: str = _PAD_META
+    publisher: str = _PAD_META
+    year: str = _PAD_META
+
+    def dict(self) -> dict[str, str]:
+        return self._asdict()
+
+
+def _process_meta(meta: str) -> list[str]:
+    return [el.strip() for el in meta.strip('{}\n.').split('@') if len(el) > 4]
+
+
+def _split(text: str) -> list[CorpusEntry]:
+    split = _META.split(text)
+    meta = _META.findall(text)
+    texts = split[1:]
+    if len(texts) != len(meta):
+        entries = list(map(CorpusEntry, texts))
+    else:
+        entries = [CorpusEntry(t, *_process_meta(m)) for t, m in zip(texts, meta)]
+    return entries
+
+
+def parse_corpus(root_path: Path) -> Iterable[CorpusEntry]:
     for path in root_path.iterdir():
-        if path.name == '10_toman_muter_il_pr.xml':
-            continue
         xml = path.read_text()
         text = _remove_tags(xml)
+        if path.name == '10_toman_muter_il_pr.xml':
+            meta = _process_meta(_META.findall(text)[0])
+            text = _META.split(text)[-1]
+            for line in text.split('\n'):
+                yield CorpusEntry(line, *meta)
+            continue
+        if not text:
+            continue
         yield from _split(text)
 
 
 if __name__ == '__main__':
     root_path = Path(__file__).parent / 'mari-corpus'
-    dataset = Dataset.from_list([{'text': entry} for entry in parse_corpus(root_path)])
+    dataset = Dataset.from_list([entry.dict() for entry in parse_corpus(root_path)])
     dataset.save_to_disk(Path(__file__).parent / 'corpora' / 'meadow-mari-marnii-corpus')
+    # dataset.push_to_hub('OneAdder/meadow-mari-marnii-corpus')
