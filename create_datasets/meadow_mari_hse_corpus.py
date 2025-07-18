@@ -56,17 +56,22 @@ def load_json_corpus(path: Path) -> Iterable[str]:
 
 
 if __name__ == '__main__':
-    main_root = Path(__file__).parent / 'tsakorpus_meadow-mari_main' / 'src_convertors' / 'corpus' / 'txt'
+    main_root = (
+        Path(__file__).parent.parent / 'tsakorpus_meadow-mari_main' / 'src_convertors' / 'corpus' / 'txt'
+    )
     nonfiction = load_plain_text_corpus(main_root / 'nonfiction')
     press = load_plain_text_corpus(main_root / 'press')
     main_corpus = Dataset.from_list([{'text': entry} for entry in chain(nonfiction, press)])
 
-    social_root = Path(__file__).parent / 'tsakorpus_meadow-mari_social' / 'src_convertors' / 'corpus' / 'json_input'
+    social_root = (
+        Path(__file__).parent.parent / 'tsakorpus_meadow-mari_social' / 'src_convertors'
+        / 'corpus' / 'json_input'
+    )
     users = load_json_corpus(social_root / 'users')
     posts = load_json_corpus(social_root)
     social_corpus = Dataset.from_list([{'text': entry} for entry in chain(users, posts)])
 
-    main_corpus.save_to_disk(Path(__file__).parent / 'corpora' / 'meadow-mari-hse-main-corpus')
-    social_corpus.save_to_disk(Path(__file__).parent / 'corpora' / 'meadow-mari-hse-social-corpus')
+    main_corpus.save_to_disk(Path(__file__).parent.parent / 'corpora' / 'meadow-mari-hse-main-corpus')
+    social_corpus.save_to_disk(Path(__file__).parent.parent / 'corpora' / 'meadow-mari-hse-social-corpus')
     # main_corpus.push_to_hub('OneAdder/meadow-mari-hse-main-corpus', private=True)
     # social_corpus.push_to_hub('OneAdder/meadow-mari-hse-social-corpus', private=True)

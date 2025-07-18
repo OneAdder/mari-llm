@@ -11,13 +11,13 @@ import numpy as np
 from datasets import Dataset
 from tqdm import tqdm
 
-from mari_vs_russian_classifier import MariVsRussianClassifier
+from utils.mari_vs_russian_classifier import MariVsRussianClassifier
 
 
 class PDFCorpus:
     NAME: str
 
-    TXT_OUTPUT = Path(__file__).parent / 'magazines_and_student_books_txt'
+    TXT_OUTPUT = Path(__file__).parent.parent / 'magazines_and_student_books_txt'
     TXT_OUTPUT.mkdir(exist_ok=True)
 
     _DASH_BREAK_REGEXP = re.compile(r'[-‑‒–—―﹘﹣－]\n?\r?', flags=re.DOTALL)
@@ -158,7 +158,7 @@ def get_num_tokens(subset: Iterable[str]) -> int:
 
 
 if __name__ == '__main__':
-    main_root = Path(__file__).parent / 'magazines_and_students_books'
+    main_root = Path(__file__).parent.parent / 'magazines_and_students_books'
 
     classifier = MariVsRussianClassifier()
 
@@ -187,5 +187,5 @@ if __name__ == '__main__':
     # print('No OCR tokens:', get_num_tokens(entry['text'] for entry in dataset if entry['category'] != 'ocr'))
     # print('Modern tokens:', get_num_tokens(entry['text'] for entry in dataset if entry['year'] > 1938))
 
-    dataset.save_to_disk(Path(__file__).parent / 'corpora' / 'mari-press-students-books-corpus')
+    dataset.save_to_disk(Path(__file__).parent.parent / 'corpora' / 'mari-press-students-books-corpus')
     # dataset.push_to_hub('OneAdder/mari-pdf-corpus')

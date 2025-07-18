@@ -13,8 +13,8 @@ from sklearn.model_selection import train_test_split
 
 class MariVsRussianClassifier:
     def __init__(self):
-        classifier_path = Path(__file__).parent / 'mari_vs_russian.classifier'
-        vectorizer_path = Path(__file__).parent / 'mari_vs_russian.vectorizer'
+        classifier_path = Path(__file__).parent.parent / 'mari_vs_russian.classifier'
+        vectorizer_path = Path(__file__).parent.parent / 'mari_vs_russian.vectorizer'
         if not classifier_path.exists():
             self.classifier, self.vectorizer = self.train()
             classifier_path.write_bytes(pickle.dumps(self.classifier))
@@ -40,7 +40,9 @@ class MariVsRussianClassifier:
             {'text': mari_examples + russian_examples, 'labels': mari_labels + russian_labels}
         )
 
-        train, test = train_test_split(classification_dataset, test_size=0.15, random_state=2525, shuffle=True)
+        train, test = train_test_split(
+            classification_dataset, test_size=0.15, random_state=2525, shuffle=True
+        )
         vectorizer = TfidfVectorizer()
         train_texts = vectorizer.fit_transform(train['text'])
         train_labels = train['labels']

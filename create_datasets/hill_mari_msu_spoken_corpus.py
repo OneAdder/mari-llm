@@ -1,14 +1,12 @@
 import re
 import warnings
-from itertools import chain
 from pathlib import Path
-from string import punctuation
-from typing import Iterable, NamedTuple, Optional
+from typing import NamedTuple, Optional
 
 from datasets import Dataset
 from nltk.tokenize import casual_tokenize, sent_tokenize
 
-from fieldworks_parser import FieldWorksProcessor
+from utils.fieldworks_parser import FieldWorksProcessor
 
 
 mapping = {
@@ -143,7 +141,7 @@ def format_metadata(meta: str) -> CorpusEntryMeta:
 
 
 if __name__ == '__main__':
-    fw_processor = FieldWorksProcessor(Path(__file__).parent / 'Gornomari.fwdata')
+    fw_processor = FieldWorksProcessor(Path(__file__).parent.parent / 'Gornomari.fwdata')
     fw_processor.run()
     res = fw_processor()
 
