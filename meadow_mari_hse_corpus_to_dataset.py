@@ -68,3 +68,5 @@ if __name__ == '__main__':
 
     main_corpus.save_to_disk(Path(__file__).parent / 'corpora' / 'meadow-mari-hse-main-corpus')
     social_corpus.save_to_disk(Path(__file__).parent / 'corpora' / 'meadow-mari-hse-social-corpus')
+    # main_corpus.push_to_hub('OneAdder/meadow-mari-hse-main-corpus', private=True)
+    # social_corpus.push_to_hub('OneAdder/meadow-mari-hse-social-corpus', private=True)

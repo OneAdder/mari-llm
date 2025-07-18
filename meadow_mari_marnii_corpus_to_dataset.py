@@ -2,13 +2,13 @@
 
 import re
 from pathlib import Path
-from typing import Iterable, NamedTuple
+from typing import Iterable, NamedTuple, Optional
 
 from bs4 import BeautifulSoup
 from datasets import Dataset
 
 
-def _remove_tags(xml: str) -> str:
+def remove_tags(xml: str) -> str:
     parser = BeautifulSoup(xml, features='xml')
     return parser.get_text()
 
@@ -44,19 +44,23 @@ def _split(text: str) -> list[CorpusEntry]:
     return entries
 
 
+def parse_marnii_xml(xml: str) -> Iterable[CorpusEntry]:
+    text = remove_tags(xml)
+    if text:
+        yield from _split(text)
+
+
 def parse_corpus(root_path: Path) -> Iterable[CorpusEntry]:
     for path in root_path.iterdir():
-        xml = path.read_text()
-        text = _remove_tags(xml)
         if path.name == '10_toman_muter_il_pr.xml':
+            xml = path.read_text()
+            text = remove_tags(xml)
             meta = _process_meta(_META.findall(text)[0])
             text = _META.split(text)[-1]
             for line in text.split('\n'):
                 yield CorpusEntry(line, *meta)
             continue
-        if not text:
-            continue
-        yield from _split(text)
+        yield from parse_marnii_xml(path.read_text())
 
 
 if __name__ == '__main__':
