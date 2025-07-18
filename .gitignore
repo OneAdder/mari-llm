@@ -4,8 +4,8 @@ mari-corpus/
 magazines_and_students_books/
 magazines_and_student_books_txt/
 Gornomari.fwdata
-mari_vs_russian_classifier
-mari_vs_russian_vectorizer
+mari_vs_russian.classifier
+mari_vs_russian.vectorizer
 pretrain_mari_llm.dataset/
 mari-bert-tokenizer
 corpora/
