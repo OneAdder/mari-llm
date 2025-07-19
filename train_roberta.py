@@ -56,7 +56,7 @@ def train(dataset_id: str, tokenizer_id: str, batch_size: int):
         num_train_epochs=40,
         per_device_train_batch_size=batch_size,
         gradient_accumulation_steps=8,
-        per_device_eval_batch_size=10,
+        per_device_eval_batch_size=batch_size,
         logging_steps=1000,
         save_steps=1000,
         load_best_model_at_end=True,

@@ -1,0 +1,10 @@
+nltk
+scikit-learn
+pandas
+numpy
+pymupdf
+tqdm
+lxml
+gdown
+flextoolslib
+beautifulsoup4
