@@ -16,6 +16,14 @@ pushd mari-llm
 pip install -r requirements.txt
 ```
 
+### HuggingFace Login
+
+```bash
+huggingface-cli login
+```
+
+This will ask for your token from `https://huggingface.co/settings/tokens`
+
 ### SCP
 
 One checkpoint:
