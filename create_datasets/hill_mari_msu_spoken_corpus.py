@@ -141,7 +141,7 @@ def format_metadata(meta: str) -> CorpusEntryMeta:
 
 
 if __name__ == '__main__':
-    fw_processor = FieldWorksProcessor(Path(__file__).parent.parent / 'Gornomari.fwdata')
+    fw_processor = FieldWorksProcessor(Path(__file__).parent.parent / 'corpora' / 'Gornomari.fwdata')
     fw_processor.run()
     res = fw_processor()
 

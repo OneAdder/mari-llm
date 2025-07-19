@@ -14,7 +14,7 @@ def remove_tags_and_header(xml: str) -> str:
 
 if __name__ == '__main__':
     texts = []
-    for filename in (Path(__file__).parent.parent / 'hill-news-corpus').glob('**/*.xml'):
+    for filename in (Path(__file__).parent.parent / 'corpora' / 'hill-news-corpus').glob('**/*.xml'):
         texts.append((filename.name, remove_tags_and_header(filename.read_text())))
     dataset = Dataset.from_list([
         {'text': text, 'name': name, 'year': re.findall(r'\d\d\d\d', name)[0]}

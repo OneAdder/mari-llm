@@ -64,7 +64,7 @@ def parse_corpus(root_path: Path) -> Iterable[CorpusEntry]:
 
 
 if __name__ == '__main__':
-    root_path = Path(__file__).parent.parent / 'mari-corpus'
+    root_path = Path(__file__).parent.parent / 'corpora' / 'mari-corpus'
     dataset = Dataset.from_list([entry.dict() for entry in parse_corpus(root_path)])
-    dataset.save_to_disk(Path(__file__).parent.parent / 'corpora' / 'meadow-mari-marnii-corpus')
+    dataset.save_to_disk(Path(__file__).parent.parent / 'mari_datasets' / 'meadow-mari-marnii-corpus')
     # dataset.push_to_hub('OneAdder/meadow-mari-marnii-corpus')

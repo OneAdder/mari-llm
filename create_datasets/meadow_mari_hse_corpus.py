@@ -71,7 +71,7 @@ if __name__ == '__main__':
     posts = load_json_corpus(social_root)
     social_corpus = Dataset.from_list([{'text': entry} for entry in chain(users, posts)])
 
-    main_corpus.save_to_disk(Path(__file__).parent.parent / 'corpora' / 'meadow-mari-hse-main-corpus')
-    social_corpus.save_to_disk(Path(__file__).parent.parent / 'corpora' / 'meadow-mari-hse-social-corpus')
+    main_corpus.save_to_disk(Path(__file__).parent.parent / 'mari_datasets' / 'meadow-mari-hse-main-corpus')
+    social_corpus.save_to_disk(Path(__file__).parent.parent / 'mari_datasets' / 'meadow-mari-hse-social-corpus')
     # main_corpus.push_to_hub('OneAdder/meadow-mari-hse-main-corpus', private=True)
     # social_corpus.push_to_hub('OneAdder/meadow-mari-hse-social-corpus', private=True)

@@ -6,7 +6,7 @@ from create_datasets.meadow_mari_marnii_corpus import parse_marnii_xml
 
 
 if __name__ == '__main__':
-    corpus_root = Path(__file__).parent.parent / 'misc-hill-corpus'
+    corpus_root = Path(__file__).parent.parent / 'corpora' / 'misc-hill-corpus'
     constitution = remove_tags_and_header((corpus_root / 'konstitucijagornaja2015bezvydelenija.doc.xml').read_text())
 
     xmls = (corpus_root / 'ervi_2010.xml').read_text().split('<?xml version="1.0" encoding="UTF-8"?>')
