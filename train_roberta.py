@@ -36,6 +36,7 @@ def group_dataset(dataset: Dataset, seq_len: int) -> Dataset:
 
 def train(dataset_id: str, tokenizer_id: str, batch_size: int):
     dataset = load_dataset(dataset_id, split='train')
+    dataset = dataset.shuffle(seed=2525)
     tokenizer = BertTokenizerFast.from_pretrained(tokenizer_id)
 
     dataset = tokenize_dataset(dataset, tokenizer)
