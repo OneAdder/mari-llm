@@ -1,8 +1,7 @@
 import os
 from itertools import chain
-from pathlib import Path
 
-from datasets import load_from_disk, Dataset
+from datasets import load_dataset, Dataset
 from transformers import BertConfig, BertForMaskedLM, BertTokenizerFast, DataCollatorForLanguageModeling, TrainingArguments, Trainer
 from transformers.trainer_utils import EvaluationStrategy
 
@@ -35,9 +34,9 @@ def group_dataset(dataset: Dataset, seq_len: int) -> Dataset:
     return grouped_dataset
 
 
-def train():
-    dataset = load_from_disk(Path(__file__).parent / 'pretrain_mari_llm.dataset')
-    tokenizer = BertTokenizerFast.from_pretrained(Path(__file__).parent / 'mari-bert-tokenizer')
+def train(dataset_id: str, tokenizer_id: str, batch_size: int):
+    dataset = load_dataset(dataset_id, split='train')
+    tokenizer = BertTokenizerFast.from_pretrained(tokenizer_id)
 
     dataset = tokenize_dataset(dataset, tokenizer)
     dataset = group_dataset(dataset, tokenizer.model_max_length)
@@ -54,7 +53,7 @@ def train():
         eval_strategy=EvaluationStrategy.STEPS,
         overwrite_output_dir=True,
         num_train_epochs=40,
-        per_device_train_batch_size=7,
+        per_device_train_batch_size=batch_size,
         gradient_accumulation_steps=8,
         per_device_eval_batch_size=10,
         logging_steps=1000,
@@ -73,4 +72,21 @@ def train():
 
 
 if __name__ == '__main__':
-    train()
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Training script')
+    parser.add_argument('--kind', choices=['hill', 'meadow', 'large'], type=str, required=True)
+    parser.add_argument('--batch-size', type=int, required=True)
+    args = parser.parse_args()
+
+    if args.kind == 'hill':
+        dataset_id = 'OneAdder/mari-bert-pretrain-hill-mari'
+        tokenizer_id = 'OneAdder/hill-mari-bert-tokenizer'
+    elif args.kind == 'meadow':
+        dataset_id = 'OneAdder/mari-bert-pretrain-meadow-mari'
+        tokenizer_id = 'OneAdder/meadow-mari-bert-tokenizer'
+    elif args.kind == 'large':
+        dataset_id = 'OneAdder/mari-bert-pretrain-large'
+        tokenizer_id = 'OneAdder/large-mari-bert-tokenizer'
+
+    train(dataset_id, tokenizer_id, args.batch_size)
