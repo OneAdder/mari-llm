@@ -9,6 +9,7 @@ def train_tokenizer(dataset: Dataset, vocab_size: int) -> BertTokenizerFast:
             yield dataset[i: i + batch_size]["text"]
 
     tokenizer = BertTokenizerFast.from_pretrained("bert-base-cased")
+    tokenizer.add_special_tokens({'eos_token': '[EOS]'})
     return tokenizer.train_new_from_iterator(text_iterator=batch_iterator(), vocab_size=vocab_size)
 
 

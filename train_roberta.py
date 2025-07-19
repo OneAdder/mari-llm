@@ -9,7 +9,7 @@ from transformers.trainer_utils import EvaluationStrategy
 def tokenize_dataset(dataset: Dataset, tokenizer: BertTokenizerFast) -> Dataset:
     def tokenize_texts(entries):
         tokenized_inputs = tokenizer(
-            entries["text"], return_special_tokens_mask=True, truncation=False,
+            [text + tokenizer.eos_token for text in entries["text"]], return_special_tokens_mask=True, truncation=False,
         )
         return tokenized_inputs
 
